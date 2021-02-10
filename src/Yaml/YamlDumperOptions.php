@@ -71,6 +71,9 @@ final class YamlDumperOptions
             if ($options['anchors'] === null) {
                 $this->setAnchors(null);
             } else {
+                if ($this->anchors === null) {
+                    $this->anchors = new AnchorBuilderOptions();
+                }
                 $this->anchors->merge($options['anchors']);
             }
         }
