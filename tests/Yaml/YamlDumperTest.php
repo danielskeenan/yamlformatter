@@ -70,6 +70,8 @@ class YamlDumperTest extends TestCase
             ]
         );
 
+        // Test with a real YAML serializer to avoid having to put the intermediate-form YAML into the test.  That
+        // intermediate form is an implementation detail.
         $yamlDumper = new YamlDumper(null, null, $anchorBuilder);
         $actual = $yamlDumper->dump($source);
         $this->assertEquals(trim($expected), trim($actual));

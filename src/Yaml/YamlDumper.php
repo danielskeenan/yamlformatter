@@ -9,6 +9,7 @@ use Ds\Map;
 use Ds\Set;
 use Ds\Vector;
 use Symfony\Component\Yaml\Dumper;
+use Symfony\Component\Yaml\Yaml;
 
 /**
  * Dump YAML files
@@ -71,12 +72,32 @@ class YamlDumper
             $this->salt = 'REF__'.mt_rand().'__';
             $this->addPlaceholders($data, $anchors, $placeholderMap, $replacements);
         }
-        // TODO: Options
         // Using PHP_INT_MAX means the dumper will never try to inline maps or lists.
-        $yaml = $this->yamlDumper->dump($data, PHP_INT_MAX);
+        $yaml = $this->yamlDumper->dump($data, PHP_INT_MAX, 0, $this->serializerFlags());
         $yaml = $this->mungeYaml($yaml, $placeholderMap, $replacements);
 
         return $yaml;
+    }
+
+    /**
+     * Build the flags for the Symfony YAML dumper
+     *
+     * @return int
+     */
+    private function serializerFlags(): int
+    {
+        $flags = 0;
+        if ($this->options->isObjectAsMap()) {
+            $flags |= Yaml::DUMP_OBJECT_AS_MAP;
+        }
+        if ($this->options->isMultiLineLiteral()) {
+            $flags |= YAML::DUMP_MULTI_LINE_LITERAL_BLOCK;
+        }
+        if ($this->options->isNullAsTilde()) {
+            $flags |= YAML::DUMP_NULL_AS_TILDE;
+        }
+
+        return $flags;
     }
 
     /**
@@ -184,7 +205,7 @@ class YamlDumper
             if (!$usedAnchors->contains($ref)) {
                 // First instance of ref, add anchor
                 $value = $replacements[$ref];
-                $replacement = rtrim($this->yamlDumper->dump($value, PHP_INT_MAX));
+                $replacement = rtrim($this->yamlDumper->dump($value, PHP_INT_MAX, 0, $this->serializerFlags()));
                 $valueOnNextLine =
                     // Map/list
                     (is_iterable($value) && !is_string($value))
