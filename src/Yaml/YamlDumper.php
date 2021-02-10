@@ -202,16 +202,43 @@ class YamlDumper
             if (!$usedAnchors->contains($ref)) {
                 // First instance of ref, add anchor
                 $value = $replacements[$ref];
-                $replacement = rtrim($this->yamlDumper->dump($value, PHP_INT_MAX, 0, $this->serializerFlags()));
-                $valueOnNextLine =
-                    // Map/list
-                    (is_iterable($value) && !is_string($value))
-                    // Multi-line string literal
-                    || substr_count(trim($replacement), "\n") > 0;
-                if ($valueOnNextLine) {
-                    // Insert value on new line
-                    $indentLevel = substr_count($matches['space'], str_repeat(' ', $this->options->getIndentation()));
-                    $replacement = "\n".$this->indentLines($replacement, $indentLevel + 1);
+                $indentLevel = substr_count(
+                    $matches['space'],
+                    str_repeat(' ', $this->options->getIndentation())
+                );
+                if (is_string($value)) {
+                    // YAML serializer will not create a multiline literal unless it's in a container.
+                    // This requires some workarounds.
+                    $replacement = $this->yamlDumper->dump([$value], PHP_INT_MAX, 0, $this->serializerFlags());
+                    // Remove list syntax from start of string, since it was just a workaround.
+                    $replacement = substr(trim($replacement), 2);
+
+                    // Multiline literals need to be indented properly.
+                    $isMultiline = substr_count($replacement, "\n") > 0;
+                    if ($isMultiline) {
+                        $literalLines = [];
+                        foreach (explode("\n", $replacement) as $literalLine) {
+                            $literalLines[] = rtrim(
+                                str_repeat(' ', $this->options->getIndentation() * ($indentLevel + 1))
+                                .trim($literalLine)
+                            );
+                        }
+                        // Remove the indentation from the first line
+                        $literalLines[0] = ltrim($literalLines[0]);
+                        $replacement = implode("\n", $literalLines);
+                    }
+
+                    // This controls how whitespace is added between the anchor and value.  Because single and multi-line
+                    // strings still have a value of some sort on the same line, the value is not necessarily on the next line.
+                    $valueOnNextLine = false;
+                } else {
+                    $replacement = rtrim($this->yamlDumper->dump($value, PHP_INT_MAX, 0, $this->serializerFlags()));
+                    $valueOnNextLine = (is_iterable($value) && !is_string($value));
+                    if ($valueOnNextLine) {
+                        // A map or list
+                        // Insert value on new line
+                        $replacement = "\n".$this->indentLines($replacement, $indentLevel + 1);
+                    }
                 }
                 // Add anchor tag
                 $replacement = '&'.$ref.($valueOnNextLine ? '' : ' ').$replacement;
@@ -224,6 +251,7 @@ class YamlDumper
             $lines->remove($ix);
             $lines->insert($ix, ...$newLines);
         }
+        $lines = $lines->map('rtrim');
 
         return $lines->join("\n");
     }
