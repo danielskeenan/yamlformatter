@@ -18,14 +18,7 @@ final class YamlDumperOptions
     private $indentation = 2;
 
     /**
-     * Write PHP objects as YAML maps.
-     *
-     * @var bool
-     */
-    private $objectAsMap = true;
-
-    /**
-     * Write string literals with multiple lines as a multi-line literal.
+     * Write string literals with multiple lines as a multi-line literal instead of embedding escaped newlines.
      *
      * @var bool
      */
@@ -71,26 +64,6 @@ final class YamlDumperOptions
     public function setIndentation(int $indentation): YamlDumperOptions
     {
         $this->indentation = $indentation;
-
-        return $this;
-    }
-
-    /**
-     * @return bool
-     */
-    public function isObjectAsMap(): bool
-    {
-        return $this->objectAsMap;
-    }
-
-    /**
-     * @param bool $objectAsMap
-     *
-     * @return YamlDumperOptions
-     */
-    public function setObjectAsMap(bool $objectAsMap): YamlDumperOptions
-    {
-        $this->objectAsMap = $objectAsMap;
 
         return $this;
     }

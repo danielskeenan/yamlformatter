@@ -87,9 +87,6 @@ class YamlDumper
     private function serializerFlags(): int
     {
         $flags = 0;
-        if ($this->options->isObjectAsMap()) {
-            $flags |= Yaml::DUMP_OBJECT_AS_MAP;
-        }
         if ($this->options->isMultiLineLiteral()) {
             $flags |= YAML::DUMP_MULTI_LINE_LITERAL_BLOCK;
         }
