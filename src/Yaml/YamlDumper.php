@@ -52,6 +52,13 @@ class YamlDumper
         $this->anchorBuilder = $anchorBuilder ?? new AnchorBuilder($this->options->getAnchors());
     }
 
+    /**
+     * Dump data
+     *
+     * @param iterable $data
+     *
+     * @return string
+     */
     public function dump(iterable $data): string
     {
         $placeholderMap = new Map();
@@ -65,6 +72,7 @@ class YamlDumper
             $this->addPlaceholders($data, $anchors, $placeholderMap, $replacements);
         }
         // TODO: Options
+        // Using PHP_INT_MAX means the dumper will never try to inline maps or lists.
         $yaml = $this->yamlDumper->dump($data, PHP_INT_MAX);
         $yaml = $this->mungeYaml($yaml, $placeholderMap, $replacements);
 

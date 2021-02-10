@@ -11,6 +11,7 @@ use PHPUnit\Framework\TestCase;
  *
  * @covers \DragoonBoots\YamlFormatter\Yaml\YamlDumper
  * @uses   \DragoonBoots\YamlFormatter\Yaml\YamlDumperOptions
+ * @uses   \DragoonBoots\YamlFormatter\AnchorBuilder\AnchorBuilderOptions
  * @uses   \Symfony\Component\Yaml\Dumper
  */
 class YamlDumperTest extends TestCase
