@@ -87,6 +87,9 @@ Here is an example:
       }
     }
 
+If you use an editor like PHPStorm that supports JSON Schema, a validation schema is
+available [here](https://github.com/danielskeenan/yamlformatter/blob/master/resources/yamlformatter.json).
+
 License
 -------
 
