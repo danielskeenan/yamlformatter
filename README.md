@@ -59,6 +59,34 @@ Use a different output directory `resources/cleaned`:
 
     vendor/bin/yamlformatter format resources/data resources/cleaned
 
+Options
+-------
+If a file called `yamlformatter.json` is in the input directory, it will be used to set options.  *Any options set in
+that file will override those passed on the command line!*
+
+The file contains a JSON object with the following properties. These properties serve the same function as the
+command-line switches, although some of them are negated:
+
+- indentation
+- multiLineLiteral
+- nullAsTilde
+- anchors
+    - include
+    - exclude
+
+Here is an example:
+
+    {
+      "indentation": 2,
+      "multiLineLiteral": true,
+      "nullAsTilde": true,
+      "anchors": {
+        "exclude": [
+          "`.+\\.short_effect`"
+        ]
+      }
+    }
+
 License
 -------
 

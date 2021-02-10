@@ -54,6 +54,18 @@ class YamlDumper
     }
 
     /**
+     * @param YamlDumperOptions $options
+     *
+     * @return YamlDumper
+     */
+    public function setOptions(YamlDumperOptions $options): YamlDumper
+    {
+        $this->options = $options;
+
+        return $this;
+    }
+
+    /**
      * Dump data
      *
      * @param iterable $data

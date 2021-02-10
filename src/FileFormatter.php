@@ -5,6 +5,8 @@ namespace DragoonBoots\YamlFormatter;
 
 use DragoonBoots\YamlFormatter\Yaml\YamlDumper;
 use DragoonBoots\YamlFormatter\Yaml\YamlDumperOptions;
+use Opis\JsonSchema\Schema;
+use Opis\JsonSchema\Validator;
 use Symfony\Component\Finder\Finder;
 use Symfony\Component\Finder\SplFileInfo;
 use Symfony\Component\Yaml\Parser;
@@ -14,6 +16,10 @@ use Symfony\Component\Yaml\Parser;
  */
 class FileFormatter
 {
+    /**
+     * @var YamlDumperOptions
+     */
+    private $options;
 
     /**
      * @var YamlDumper
@@ -26,6 +32,18 @@ class FileFormatter
     private $parser;
 
     /**
+     * @var Validator
+     */
+    private $validator;
+
+    /**
+     * @var Schema
+     */
+    private $schema;
+
+    private const FORMATTER_OPTIONS_FILE = '.yamlformatter.json';
+
+    /**
      * FileFormatter constructor.
      *
      * @param YamlDumperOptions|null $options
@@ -35,10 +53,23 @@ class FileFormatter
     public function __construct(
         ?YamlDumperOptions $options = null,
         ?YamlDumper $yamlDumper = null,
-        ?Parser $yamlParser = null
+        ?Parser $yamlParser = null,
+        ?Validator $schemaValidator = null
     ) {
-        $this->dumper = $yamlDumper ?? new YamlDumper($options);
+        $this->options = $options ?? new YamlDumperOptions();
+        $this->dumper = $yamlDumper ?? new YamlDumper($this->options);
         $this->parser = $yamlParser ?? new Parser();
+        $this->validator = $schemaValidator ?? new Validator();
+
+        $schemaPath = implode(
+            DIRECTORY_SEPARATOR,
+            [
+                dirname(__FILE__, 2),
+                'resources',
+                'yamlformatter.json',
+            ]
+        );
+        $this->schema = Schema::fromJsonString(file_get_contents($schemaPath));
     }
 
     /**
@@ -72,6 +103,7 @@ class FileFormatter
         } else {
             throw new \RuntimeException('The input path is not a file or directory.');
         }
+        $this->dumper->setOptions($this->useFormatterOptions($inputPath));
 
         $count = 0;
         $total = count($finder);
@@ -94,5 +126,44 @@ class FileFormatter
                 call_user_func($progressCallback, $count, $total, $fileInfo->getRelativePathname());
             }
         }
+    }
+
+    /**
+     * Choose the formatter options to use
+     *
+     * @param string $path
+     *
+     * @return YamlDumperOptions
+     */
+    private function useFormatterOptions(string $path): YamlDumperOptions
+    {
+        if (is_file($path)) {
+            $path = dirname($path);
+        }
+        $formatterOptionsPath = implode(DIRECTORY_SEPARATOR, [$path, self::FORMATTER_OPTIONS_FILE]);
+        if (is_file($formatterOptionsPath)) {
+            // Found an options file
+            // Verify schema
+            $json = file_get_contents($formatterOptionsPath);
+            if ($json === false) {
+                throw new \RuntimeException('Cannot read formatter options file at '.$formatterOptionsPath);
+            }
+            $formatterOptions = json_decode($json);
+            if ($formatterOptions === null) {
+                throw new \RuntimeException('Formatter options file at '.$formatterOptionsPath.' is invalid JSON');
+            }
+            $valid = $this->validator->schemaValidation($formatterOptions, $this->schema);
+            if ($valid->hasErrors()) {
+                throw new \RuntimeException(
+                    'Formatter options file at '.$formatterOptionsPath.' is contains invalid options'
+                );
+            }
+            $options = clone $this->options;
+            $options->merge(json_decode($json, true));
+
+            return $options;
+        }
+
+        return $this->options;
     }
 }

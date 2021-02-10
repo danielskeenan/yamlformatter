@@ -1,0 +1,56 @@
+{
+  "title": "YAML Formatter options",
+  "description": "Configures the YAML formatter using a file called .yamlformatter.json",
+  "type": "object",
+  "properties": {
+    "indentation": {
+      "title": "Indentation",
+      "description": "Spaces to use on nested nodes",
+      "type": "integer",
+      "minimum": 1,
+      "default": 2
+    },
+    "multiLineLiteral": {
+      "title": "Multi-line literal",
+      "description": "Write string literals with multiple lines as a multi-line literal instead of embedding escaped newlines",
+      "type": "boolean",
+      "default": true
+    },
+    "nullAsTilde": {
+      "title": "Null as tilde",
+      "description": "Write null values with a tilde",
+      "type": "boolean",
+      "default": true
+    },
+    "anchors": {
+      "title": "Anchor generation",
+      "description": "Configure automatic anchor generation",
+      "oneOf": [
+        {
+          "type": "null"
+        },
+        {
+          "type": "object",
+          "properties": {
+            "include": {
+              "title": "Include patterns",
+              "description": "Regular expression of paths to include; defaults to including everything",
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "exclude": {
+              "title": "Exclude patterns",
+              "description": "Regular expression of paths to exclude, overriding any patterns set in include",
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      ]
+    }
+  }
+}

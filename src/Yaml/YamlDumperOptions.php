@@ -49,6 +49,36 @@ final class YamlDumperOptions
     }
 
     /**
+     * Merge in config
+     *
+     * @param array $options
+     *
+     * @return YamlDumperOptions
+     */
+    public function merge(array $options): YamlDumperOptions
+    {
+        $setters = [
+            'indentation' => [$this, 'setIndentation'],
+            'multiLineLiteral' => [$this, 'setMultiLineLiteral'],
+            'nullAsTilde' => [$this, 'setNullAsTilde'],
+        ];
+        foreach ($setters as $prop => $setter) {
+            if (isset($options[$prop])) {
+                call_user_func($setter, $options[$prop]);
+            }
+        }
+        if (array_key_exists('anchors', $options)) {
+            if ($options['anchors'] === null) {
+                $this->setAnchors(null);
+            } else {
+                $this->anchors->merge($options['anchors']);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
      * @return int
      */
     public function getIndentation(): int

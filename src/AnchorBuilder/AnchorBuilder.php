@@ -27,6 +27,18 @@ class AnchorBuilder
     }
 
     /**
+     * @param AnchorBuilderOptions $options
+     *
+     * @return AnchorBuilder
+     */
+    public function setOptions(AnchorBuilderOptions $options): AnchorBuilder
+    {
+        $this->options = $options;
+
+        return $this;
+    }
+
+    /**
      * Determine which dataset members should be used as anchors
      *
      * @param iterable $data

@@ -33,6 +33,28 @@ final class AnchorBuilderOptions
     }
 
     /**
+     * Merge in config
+     *
+     * @param array $options
+     *
+     * @return $this
+     */
+    public function merge(array $options): AnchorBuilderOptions
+    {
+        $setters = [
+            'include' => [$this, 'setInclude'],
+            'exclude' => [$this, 'setExclude'],
+        ];
+        foreach ($setters as $prop => $setter) {
+            if (isset($options[$prop])) {
+                call_user_func($setter, $options[$prop]);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
      * @return array
      */
     public function getInclude(): array
