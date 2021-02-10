@@ -37,6 +37,6 @@
     }
   },
   "bin": [
-    "bin/yamlformatter.php"
+    "bin/yamlformatter"
   ]
 }
