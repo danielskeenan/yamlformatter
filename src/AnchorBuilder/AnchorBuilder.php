@@ -11,7 +11,10 @@ use Ds\Vector;
  */
 class AnchorBuilder
 {
-    private AnchorBuilderOptions $options;
+    /**
+     * @var AnchorBuilderOptions
+     */
+    private $options;
 
     /**
      * AnchorBuilder constructor.
@@ -80,12 +83,12 @@ class AnchorBuilder
 
     private function includePath(string $path): bool
     {
-        if (empty($this->options->include)) {
+        if (empty($this->options->getInclude())) {
             // Default to including everything
             return true;
         }
 
-        foreach ($this->options->include as $pattern) {
+        foreach ($this->options->getInclude() as $pattern) {
             if (preg_match($pattern, $path) === 1) {
                 return true;
             }
@@ -96,7 +99,7 @@ class AnchorBuilder
 
     private function excludePath(string $path): bool
     {
-        foreach ($this->options->exclude as $pattern) {
+        foreach ($this->options->getExclude() as $pattern) {
             if (preg_match($pattern, $path) === 1) {
                 return true;
             }
@@ -117,7 +120,7 @@ class AnchorBuilder
      *
      * @return Vector|null
      */
-    private function useAnchor(mixed $value, Vector $valuePath, Map $anchors): ?Vector
+    private function useAnchor($value, Vector $valuePath, Map $anchors): ?Vector
     {
         /** @var Vector $checkAnchorKey */
         foreach ($anchors as $checkAnchorKey => $checkValue) {

@@ -19,7 +19,7 @@ class AnchorBuilderTest extends TestCase
     public function testBuildAnchors(array $source, AnchorBuilderOptions $options, array $expected)
     {
         $anchorBuilder = new AnchorBuilder($options);
-        self::assertEquals($expected, $anchorBuilder->buildAnchors($source));
+        $this->assertEquals($expected, $anchorBuilder->buildAnchors($source));
     }
 
     public function buildAnchorsDataProvider()
@@ -60,6 +60,30 @@ class AnchorBuilderTest extends TestCase
                     'list' => ['item1', 'item2'],
                     'mapping_field' => ['inner_field' => 'inner value'],
                     'mapping_field.inner_field' => 'inner value',
+                ],
+            ],
+            'build included refs' => [
+                'source' => $source,
+                // TODO: named args
+                'options' => new AnchorBuilderOptions(['`[^.]+field$`']),
+                'expected' => [
+                    'mapping_field' => ['inner_field' => 'inner value'],
+                ],
+            ],
+            'build excluded refs' => [
+                'source' => $source,
+                // TODO: named args
+                'options' => new AnchorBuilderOptions([], ['`[^.]+field$`']),
+                'expected' => [
+                    'list' => ['item1', 'item2'],
+                ],
+            ],
+            'build complex refs' => [
+                'source' => $source,
+                // TODO: named args
+                'options' => new AnchorBuilderOptions(['`[^.]+field$`'], ['`.+\.inner_field`']),
+                'expected' => [
+                    'mapping_field' => ['inner_field' => 'inner value'],
                 ],
             ],
         ];
