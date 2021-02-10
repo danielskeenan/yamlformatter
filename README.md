@@ -49,15 +49,15 @@ For example:
 
 Given a directory called `resources/data`, this will add refs to all files in place:
 
-    vendor/bin/yamlformatter resources/data
+    vendor/bin/yamlformatter format resources/data
 
 Do not generate refs automatically:
 
-    vendor/bin/yamlformatter --no-anchors resources/data
+    vendor/bin/yamlformatter format --no-anchors resources/data
 
 Use a different output directory `resources/cleaned`:
 
-    vendor/bin/yamlformatter resources/data resources/cleaned
+    vendor/bin/yamlformatter format resources/data resources/cleaned
 
 License
 -------
