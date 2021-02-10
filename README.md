@@ -18,7 +18,7 @@ This isn't in Packagist yet, so add it as a vcs repository:
         {
             "type": "vcs",
             "url": "https://github.com/danielskeenan/yamlformatter.git"
-        },
+        }
     ]
 
 See available options with `vendor/bin/yamlformatter format --help`
