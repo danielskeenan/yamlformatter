@@ -10,6 +10,7 @@ use PHPUnit\Framework\TestCase;
  * Test AnchorBuilder
  *
  * @covers \DragoonBoots\YamlFormatter\AnchorBuilder\AnchorBuilder
+ * @uses   \DragoonBoots\YamlFormatter\AnchorBuilder\AnchorBuilderOptions
  */
 class AnchorBuilderTest extends TestCase
 {
