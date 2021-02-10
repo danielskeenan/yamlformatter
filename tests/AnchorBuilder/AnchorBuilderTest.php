@@ -26,8 +26,6 @@ class AnchorBuilderTest extends TestCase
     public function buildAnchorsDataProvider()
     {
         $source = [
-            'group' => 'new_group',
-            'identifier' => 'new_file',
             'scalar_field' => 'value',
             'list' => [
                 'item1',
