@@ -72,7 +72,7 @@ class AnchorBuilder
                 $useAnchors[$useAnchor] = $value;
             } else {
                 $anchors[$valuePath] = $value;
-                if (is_iterable($value)) {
+                if (is_iterable($value) && !is_string($value)) {
                     $this->compile($value, $useAnchors, $anchors, $valuePath);
                 }
             }
@@ -126,7 +126,7 @@ class AnchorBuilder
         foreach ($anchors as $checkAnchorKey => $checkValue) {
             $sameValue = $checkValue === $value;
             $similarPath = $checkAnchorKey->last() === $valuePath->last();
-            if ($sameValue && (is_iterable($value) || $similarPath)) {
+            if ($sameValue && ((is_iterable($value) && !is_string($value)) || $similarPath)) {
                 return $checkAnchorKey;
             }
         }
