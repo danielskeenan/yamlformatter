@@ -49,6 +49,7 @@ class FileFormatter
      * @param YamlDumperOptions|null $options
      * @param YamlDumper|null $yamlDumper
      * @param Parser|null $yamlParser
+     * @param Validator|null $schemaValidator
      */
     public function __construct(
         ?YamlDumperOptions $options = null,
@@ -103,7 +104,9 @@ class FileFormatter
         } else {
             throw new \RuntimeException('The input path is not a file or directory.');
         }
-        $this->dumper->setOptions($this->useFormatterOptions($inputPath));
+        if (!$this->options->isNoOptionsFile()) {
+            $this->dumper->setOptions($this->useFormatterOptions($inputPath));
+        }
 
         $count = 0;
         $total = count($finder);

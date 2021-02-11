@@ -41,6 +41,13 @@ final class YamlDumperOptions
     private $anchors;
 
     /**
+     * Disable the options file
+     *
+     * @var bool
+     */
+    private $noOptionsFile = false;
+
+    /**
      * YamlDumperOptions constructor.
      */
     public function __construct()
@@ -157,6 +164,26 @@ final class YamlDumperOptions
     public function setAnchors(?AnchorBuilderOptions $anchors): YamlDumperOptions
     {
         $this->anchors = $anchors;
+
+        return $this;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isNoOptionsFile(): bool
+    {
+        return $this->noOptionsFile;
+    }
+
+    /**
+     * @param bool $noOptionsFile
+     *
+     * @return YamlDumperOptions
+     */
+    public function setNoOptionsFile(bool $noOptionsFile): YamlDumperOptions
+    {
+        $this->noOptionsFile = $noOptionsFile;
 
         return $this;
     }

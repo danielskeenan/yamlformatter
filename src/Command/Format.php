@@ -30,13 +30,17 @@ class Format extends Command
         $this->setName('format')
             ->setDescription('Format YAML files')
             ->addOption(
+                'override',
+                'o',
+                InputOption::VALUE_NONE,
+                'Override .yamlformatter.json options'
+            )->addOption(
                 'indent',
                 null,
                 InputOption::VALUE_REQUIRED,
                 'Number of spaces to indent',
                 2
-            )
-            ->addOption(
+            )->addOption(
                 'no-multiline-literal',
                 null,
                 InputOption::VALUE_NONE,
@@ -61,9 +65,11 @@ class Format extends Command
                 null,
                 InputOption::VALUE_REQUIRED | InputOption::VALUE_IS_ARRAY,
                 'Regular expression for YAML path to not generate anchors for.'
-            )
-            ->addArgument('INPUT', InputArgument::REQUIRED, 'Input file or directory')
-            ->addArgument(
+            )->addArgument(
+                'INPUT',
+                InputArgument::REQUIRED,
+                'Input file or directory'
+            )->addArgument(
                 'OUTPUT',
                 InputArgument::OPTIONAL,
                 'Output file or directory. Will overwrite when not specified.'
@@ -118,7 +124,8 @@ class Format extends Command
         $options = new YamlDumperOptions();
         $options->setIndentation($input->getOption('indent'))
             ->setMultiLineLiteral(!$input->getOption('no-multiline-literal'))
-            ->setNullAsTilde(!$input->getOption('no-null-tilde'));
+            ->setNullAsTilde(!$input->getOption('no-null-tilde'))
+            ->setNoOptionsFile($input->getOption('override'));
         if ($noAnchors) {
             $options->setAnchors(null);
         } else {

@@ -76,12 +76,12 @@ class YamlDumper
     {
         $placeholderMap = new Map();
         $replacements = new Map();
+        $this->salt = 'REF__'.mt_rand().'__';
         if ($this->options->getAnchors() !== null) {
             // Because anchors and aliases aren't exposed in the serializer, we have to get creative.
             // This algorithm find repeated values, replaces them with a placeholder, then replaces
             // that placeholder the the final value + anchor or an alias as appropriate.
             $anchors = $this->anchorBuilder->buildAnchors($data);
-            $this->salt = 'REF__'.mt_rand().'__';
             $this->addPlaceholders($data, $anchors, $placeholderMap, $replacements);
         }
         // Using PHP_INT_MAX means the dumper will never try to inline maps or lists.

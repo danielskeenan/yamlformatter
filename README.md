@@ -31,6 +31,7 @@ See available options with `vendor/bin/yamlformatter format --help`
       OUTPUT                                 Output file or directory. Will overwrite when not specified.
     
     Options:
+      -o, --override                         Override .yamlformatter.json options
           --indent=INDENT                    Number of spaces to indent [default: 2]
           --no-multiline-literal             Write string literals with multiple lines with embedded escaped newlines instead of as a multi-line literal
           --no-null-tilde                    Write null values as "null"
@@ -61,8 +62,8 @@ Use a different output directory `resources/cleaned`:
 
 Options
 -------
-If a file called `yamlformatter.json` is in the input directory, it will be used to set options.  *Any options set in
-that file will override those passed on the command line!*
+If a file called `.yamlformatter.json` is in the input directory, it will be used to set options.  *Any options set in
+that file will override those passed on the command line, unless `--override` is used!*
 
 The file contains a JSON object with the following properties. These properties serve the same function as the
 command-line switches, although some of them are negated:
