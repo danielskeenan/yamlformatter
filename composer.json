@@ -1,7 +1,6 @@
 {
   "name": "dragoonboots/yamlformatter",
   "description": "Auto-format YAML files with refs",
-  "type": "project",
   "license": "MIT",
   "homepage": "https://github.com/danielskeenan/yamlformatter",
   "readme": "README.md",
