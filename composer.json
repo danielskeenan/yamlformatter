@@ -1,8 +1,14 @@
 {
   "name": "dragoonboots/yamlformatter",
-  "description": "Format YAML files",
+  "description": "Auto-format YAML files with refs",
   "type": "project",
   "license": "MIT",
+  "homepage": "https://github.com/danielskeenan/yamlformatter",
+  "readme": "README.md",
+  "support": {
+    "issues": "https://github.com/danielskeenan/yamlformatter/issues",
+    "source": "https://github.com/danielskeenan/yamlformatter"
+  },
   "authors": [
     {
       "name": "Dan Keenan",
@@ -21,6 +27,9 @@
   "require-dev": {
     "mikey179/vfsstream": "^1.6",
     "phpunit/phpunit": "^9.5"
+  },
+  "suggest": {
+    "ext-ds": "Allows a small speed/efficiency increase"
   },
   "config": {
     "preferred-install": {

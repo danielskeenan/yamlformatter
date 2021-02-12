@@ -12,14 +12,9 @@ Features:
 Usage
 -----
 
-This isn't in Packagist yet, so add it as a vcs repository:
+Install with Composer:
 
-    "repositories": [
-        {
-            "type": "vcs",
-            "url": "https://github.com/danielskeenan/yamlformatter.git"
-        }
-    ]
+    composer require dragoonboots/yamlformatter
 
 See available options with `vendor/bin/yamlformatter format --help`
 
