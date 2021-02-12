@@ -61,6 +61,9 @@ class YamlDumper
     public function setOptions(YamlDumperOptions $options): YamlDumper
     {
         $this->options = $options;
+        if ($options->getAnchors() !== null) {
+            $this->anchorBuilder->setOptions($options->getAnchors());
+        }
 
         return $this;
     }
